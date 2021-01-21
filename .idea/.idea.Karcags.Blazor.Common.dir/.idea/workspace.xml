@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b949dd8f-6c1c-427e-91e4-bd9ac5706a34" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <changedPaths>
+      <option value="$PROJECT_DIR$/Enums/AlertType.cs" />
+      <option value="$PROJECT_DIR$/Enums/Alignment.cs" />
+      <option value="$PROJECT_DIR$/Enums/ConfirmType.cs" />
+      <option value="$PROJECT_DIR$/Http/HttpBody.cs" />
+      <option value="$PROJECT_DIR$/Http/HttpCall.cs" />
+      <option value="$PROJECT_DIR$/Models/Interfaces/IDictionaryState.cs" />
+      <option value="$PROJECT_DIR$/Models/Interfaces/IListState.cs" />
+      <option value="$PROJECT_DIR$/Models/ApiResponseModel.cs" />
+      <option value="$PROJECT_DIR$/Models/ApplicationSettings.cs" />
+      <option value="$PROJECT_DIR$/Models/ModalButtonOptions.cs" />
+      <option value="$PROJECT_DIR$/Models/ModalOptions.cs" />
+      <option value="$PROJECT_DIR$/Models/ModalParameters.cs" />
+      <option value="$PROJECT_DIR$/Models/ModalResult.cs" />
+      <option value="$PROJECT_DIR$/Models/Interfaces/IIdentified.cs" />
+      <option value="$PROJECT_DIR$/Models/TableHeaderData.cs" />
+      <option value="$PROJECT_DIR$/Http/HttpPathParameters.cs" />
+      <option value="$PROJECT_DIR$/Http/HttpQueryParameters.cs" />
+      <option value="$PROJECT_DIR$/Services/IHelperService.cs" />
+      <option value="$PROJECT_DIR$/Services/HelperService.cs" />
+      <option value="$PROJECT_DIR$/Http/HttpService.cs" />
+      <option value="$PROJECT_DIR$/Http/HttpSettings.cs" />
+      <option value="$PROJECT_DIR$/Http/IHttpCall.cs" />
+      <option value="$PROJECT_DIR$/Http/IHttpService.cs" />
+      <option value="$PROJECT_DIR$/Http/ToasterSettings.cs" />
+      <option value="$PROJECT_DIR$/Lists/SimpleList.razor.cs" />
+      <option value="$PROJECT_DIR$/Services/IModalService.cs" />
+      <option value="$PROJECT_DIR$/Services/ModalService.cs" />
+      <option value="$PROJECT_DIR$/Modal/BlazoredModal.razor.cs" />
+      <option value="$PROJECT_DIR$/Confirm/Confirm.razor" />
+      <option value="$PROJECT_DIR$/Enums/OrderDirection.cs" />
+      <option value="$PROJECT_DIR$/Lists/ListTable.razor.cs" />
+      <option value="$PROJECT_DIR$/Lists/ListTable.razor" />
+    </changedPaths>
+  </component>
+  <component name="ProjectId" id="1nNgBvD8HYCZOk4x1he8J3IOyyP" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Karcags.Blazor.Common.csproj" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b949dd8f-6c1c-427e-91e4-bd9ac5706a34" name="Default Changelist" comment="" />
+      <created>1611235831454</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1611235831454</updated>
+      <workItem from="1611235836406" duration="1306000" />
+      <workItem from="1611237202196" duration="22000" />
+      <workItem from="1611237229342" duration="262000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+</project>
