@@ -1,0 +1,139 @@
+﻿@import "../../Styles/_common.scss";
+
+.list {
+    flex-grow: 1;
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
+
+    .filter {
+        display: flex;
+    }
+
+    table {
+        flex-grow: 1;
+        position: relative;
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: $border-radius;
+
+        thead {
+            tr {
+
+                th {
+                    position: sticky;
+                    top: 0;
+                    color: $primary;
+                    background-color: $white;
+                    opacity: 90%;
+                    padding: 0.4rem;
+
+                    .arrow-icon {
+                        font-size: 1.2rem;
+                    }
+
+                    &.right {
+                        text-align: right;
+                    }
+
+                    &.center {
+                        text-align: center;
+                    }
+
+                    &.left {
+                        text-align: left;
+                    }
+
+                    &:first-child {
+                        border-left: 5px solid $white-trans;
+                    }
+
+                    &:last-child {
+                        border-right: 5px solid $white-trans;
+                    }
+                }
+            }
+        }
+
+        tfoot {
+
+            tr {
+
+                th {
+                    position: sticky;
+                    bottom: 0;
+                    color: $primary;
+                    background-color: $white;
+                    opacity: 90%;
+                    padding: 0.4rem;
+
+                    &.left {
+                        text-align: left;
+                    }
+
+                    &.center {
+                        text-align: center;
+                    }
+
+                    &.right {
+                        text-align: right;
+                    }
+
+                    &:first-child {
+                        border-left: 5px solid $white-trans;
+                    }
+
+                    &:last-child {
+                        border-right: 5px solid $white-trans;
+                    }
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                transition-duration: 0.5s;
+
+                td {
+                    padding: 0.4rem;
+
+                    &.left {
+                        text-align: left;
+                    }
+
+                    &.center {
+                        text-align: center;
+                    }
+
+                    &.right {
+                        text-align: right;
+                    }
+
+                    &:first-child {
+                        border-left: 5px solid $white-trans;
+                    }
+
+                    &:last-child {
+                        border-right: 5px solid $white-trans;
+                    }
+                }
+
+                &:nth-child(even) {
+                    background-color: $primary-hover;
+                }
+
+                &:hover {
+                    background-color: $primary-secondary-trans !important;
+                    color: $primary;
+                    transition-duration: 0.5s;
+                    cursor: pointer;
+                }
+
+                &.selected {
+                    background-color: $primary;
+                    color: $white;
+                }
+            }
+        }
+    }
+}

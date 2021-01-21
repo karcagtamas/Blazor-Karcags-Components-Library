@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karcags.Blazor", "Karcags.Blazor\Karcags.Blazor.csproj", "{CE985FCE-2105-4154-921D-3B38477075F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karcags.Blazor.Common", "Karcags.Blazor.Common\Karcags.Blazor.Common.csproj", "{6FF43890-D73E-4352-AF5A-0A4B4C25CAFF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE985FCE-2105-4154-921D-3B38477075F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE985FCE-2105-4154-921D-3B38477075F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE985FCE-2105-4154-921D-3B38477075F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE985FCE-2105-4154-921D-3B38477075F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FF43890-D73E-4352-AF5A-0A4B4C25CAFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FF43890-D73E-4352-AF5A-0A4B4C25CAFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FF43890-D73E-4352-AF5A-0A4B4C25CAFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FF43890-D73E-4352-AF5A-0A4B4C25CAFF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,8 @@
+@typeparam T
+
+<div>
+    @foreach (var i in ListElements)
+    {
+        <div @onclick="() => Select(i)">@CustomDisplayer(i)</div>
+    }
+    </div>

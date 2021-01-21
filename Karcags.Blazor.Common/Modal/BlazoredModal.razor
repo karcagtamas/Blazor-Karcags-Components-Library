@@ -1,0 +1,29 @@
+<MatDialog CanBeClosed="@(!ComponentDisableBackgroundCancel)" IsOpenChanged="HandleBackgroundClick" IsOpen="@IsVisible">
+    @if (!ComponentHideHeader)
+    {
+        <MatDialogTitle>
+            @Title
+        </MatDialogTitle>
+    }
+    <MatDialogContent class="flex-parent">
+        <div class="dialog-content p-3">
+            <div class="flex-parent @ComponentStyle">
+                <CascadingValue Value="this">
+                    <CascadingValue Value="@Parameters">
+                        @Content
+                    </CascadingValue>
+                </CascadingValue>
+            </div>
+        </div>
+    </MatDialogContent>
+    <MatDialogActions>
+        @if (ShowConfirmButton)
+        {
+            <MatButton @onclick="ModalService.Confirm">@ConfirmButtonText</MatButton>
+        }
+        @if (ShowCancelButton)
+        {
+            <MatButton @onclick="ModalService.Cancel">@CancelButtonText</MatButton>
+        }
+    </MatDialogActions>
+</MatDialog>

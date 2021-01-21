@@ -1,0 +1,46 @@
+@using Karcags.Blazor.Common.Enums
+@using Karcags.Blazor.Common.Modal
+@using Karcags.Blazor.Common.Models
+@using Karcags.Blazor.Common.Services
+<div class="w-100">
+    <p>@GetMessage()</p>
+</div>
+
+@code
+{
+    [CascadingParameter]
+    public ModalParameters Parameters { get; set; }
+
+    [CascadingParameter]
+    public BlazoredModal BlazoredModal { get; set; }
+
+    [Inject]
+    IModalService ModalService { get; set; }
+
+    private ConfirmType Type { get; set; }
+
+    private string Name { get; set; }
+
+    public int FormId { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.FormId = Parameters.Get<int>("FormId");
+        this.Type = Parameters.Get<ConfirmType>("type");
+        this.Name = Parameters.Get<string>("name");
+        ((ModalService)ModalService).OnConfirm += OnConfirm;
+    }
+
+    protected string GetMessage()
+    {
+        string baseMsg = "Are you really want to";
+        string type = Type.ToString();
+        return $"{baseMsg} {type} {Name}?";
+    }
+
+    protected void OnConfirm()
+    {
+        this.ModalService.Close(ModalResult.Ok<bool>(true));
+        ((ModalService)ModalService).OnConfirm -= OnConfirm;
+    }
+}
