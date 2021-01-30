@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b949dd8f-6c1c-427e-91e4-bd9ac5706a34" name="Default Changelist" comment="" />
+    <list default="true" id="b949dd8f-6c1c-427e-91e4-bd9ac5706a34" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Karcags.Blazor.Common/Karcags.Blazor.Common.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Karcags.Blazor.Common/Karcags.Blazor.Common.csproj" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,6 +73,7 @@
       <workItem from="1611237202196" duration="22000" />
       <workItem from="1611237229342" duration="262000" />
       <workItem from="1611404163809" duration="38000" />
+      <workItem from="1612032164476" duration="16000" />
     </task>
     <servers />
   </component>

@@ -10,19 +10,19 @@ namespace Karcags.Blazor.Common.Services
 {
     public class HelperService : IHelperService
     {
-        private const string NA = "N/A";
-        private readonly NavigationManager _navigationManager;
-        private readonly IMatToaster _toaster;
+        protected const string NA = "N/A";
+        protected readonly NavigationManager NavigationManager;
+        protected readonly IMatToaster Toaster;
 
         public HelperService(NavigationManager navigationManager, IMatToaster toaster)
         {
-            this._navigationManager = navigationManager;
-            this._toaster = toaster;
+            this.NavigationManager = navigationManager;
+            this.Toaster = toaster;
         }
 
         public void Navigate(string path)
         {
-            this._navigationManager.NavigateTo(path);
+            this.NavigationManager.NavigateTo(path);
         }
 
         public JsonSerializerOptions GetSerializerOptions()
@@ -34,14 +34,14 @@ namespace Karcags.Blazor.Common.Services
         {
             if (response.IsSuccessStatusCode)
             {
-                this._toaster.Add("Event successfully accomplished", MatToastType.Success, caption);
+                this.Toaster.Add("Event successfully accomplished", MatToastType.Success, caption);
             }
             else
             {
                 using (var sr = await response.Content.ReadAsStreamAsync())
                 {
                     var e = await System.Text.Json.JsonSerializer.DeserializeAsync<ErrorResponse>(sr, this.GetSerializerOptions());
-                    this._toaster.Add(e.Message, MatToastType.Danger, caption);
+                    this.Toaster.Add(e.Message, MatToastType.Danger, caption);
                 }
             }
         }

@@ -6,13 +6,13 @@ namespace Karcags.Blazor.Common.Services
 {
     public class CommonService<TModel, TElement> : ICommonService<TModel, TElement>
     {
-        private readonly IHttpService _httpService;
-        private string Url { get; init; }
-        private string Entity { get; init; }
+        protected readonly IHttpService HttpService;
+        protected string Url { get; init; }
+        protected string Entity { get; init; }
 
         public CommonService(string url, string entity, IHttpService httpService)
         {
-            _httpService = httpService;
+            HttpService = httpService;
             Url = url;
             Entity = entity;
         }
@@ -24,14 +24,14 @@ namespace Karcags.Blazor.Common.Services
 
             var settings = new HttpSettings($"{Url}/{Entity}", null, pathParams);
 
-            return await _httpService.Get<TElement>(settings);
+            return await HttpService.Get<TElement>(settings);
         }
 
         public async Task<List<TElement>> GetList()
         {
             var settings = new HttpSettings($"{Url}/{Entity}");
 
-            return await _httpService.Get<List<TElement>>(settings);
+            return await HttpService.Get<List<TElement>>(settings);
         }
 
         public async Task<bool> Remove(int id)
@@ -41,7 +41,7 @@ namespace Karcags.Blazor.Common.Services
 
             var settings = new HttpSettings($"{Url}/{Entity}", null, pathParams);
 
-            return await _httpService.Delete(settings);
+            return await HttpService.Delete(settings);
         }
 
         public async Task<bool> Update(int id, TModel model)
@@ -53,7 +53,7 @@ namespace Karcags.Blazor.Common.Services
 
             var body = new HttpBody<TModel>(model);
 
-            return await _httpService.Update(settings, body);
+            return await HttpService.Update(settings, body);
         }
 
         public async Task<bool> Create(TModel model)
@@ -62,7 +62,7 @@ namespace Karcags.Blazor.Common.Services
 
             var body = new HttpBody<TModel>(model);
 
-            return await _httpService.Create(settings, body);
+            return await HttpService.Create(settings, body);
         }
     }
 }
