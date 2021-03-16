@@ -7,7 +7,7 @@ namespace Karcags.Blazor.Common.Models
     /// </summary>
     public class ToasterSettings
     {
-        public string Title { get; set; }
+        public string Message { get; set; }
         public string Caption { get; set; }
         public ToasterType Type { get; set; }
         public bool IsNeeded { get; set; }

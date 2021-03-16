@@ -1,4 +1,5 @@
 using System;
+using Karcags.Blazor.Common.Enums;
 using Karcags.Blazor.Common.Models;
 
 namespace Karcags.Blazor.Common.Http
@@ -81,6 +82,31 @@ namespace Karcags.Blazor.Common.Http
                 throw new ArgumentException("Invalid url");
             }
             this.Url = url;
+        }
+
+        /**
+         * Add toaster to HTTP settings
+         * <param name="settings">Toaster settings</param>
+         */
+        public void AddToaster(ToasterSettings settings)
+        {
+            if (settings != null)
+            {
+                ToasterSettings = settings;
+            }
+        }
+
+        /**
+         * Add toaster to HTTP settings
+         * <param name="caption">Caption</param>
+         */
+        public void AddToaster(string caption)
+        {
+            ToasterSettings = new ToasterSettings
+            {
+                Caption = caption,
+                IsNeeded = true
+            };
         }
     }
 }

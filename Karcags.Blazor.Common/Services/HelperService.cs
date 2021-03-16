@@ -36,14 +36,14 @@ namespace Karcags.Blazor.Common.Services
             if (response.IsSuccessStatusCode)
             {
                 ToasterService.Open(new ToasterSettings
-                    {Title = "Event successfully accomplished", Caption = caption, Type = ToasterType.Success});
+                    {Message = "Event successfully accomplished", Caption = caption, Type = ToasterType.Success});
             }
             else
             {
                 await using var sr = await response.Content.ReadAsStreamAsync();
                 var e = await JsonSerializer.DeserializeAsync<ErrorResponse>(sr, this.GetSerializerOptions());
                 ToasterService.Open(new ToasterSettings
-                    {Title = e?.Message ?? "-", Caption = caption, Type = ToasterType.Error});
+                    {Message = e?.Message ?? "-", Caption = caption, Type = ToasterType.Error});
             }
         }
 

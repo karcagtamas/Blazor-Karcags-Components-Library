@@ -40,6 +40,7 @@ namespace Karcags.Blazor.Common.Services
             pathParams.Add(id, -1);
 
             var settings = new HttpSettings($"{Url}/{Entity}", null, pathParams);
+            settings.AddToaster($"Remove {Entity}");
 
             return await HttpService.Delete(settings);
         }
@@ -50,6 +51,7 @@ namespace Karcags.Blazor.Common.Services
             pathParams.Add(id, -1);
 
             var settings = new HttpSettings($"{Url}/{Entity}", null, pathParams);
+            settings.AddToaster($"Update {Entity}");
 
             var body = new HttpBody<TModel>(model);
 
@@ -59,6 +61,7 @@ namespace Karcags.Blazor.Common.Services
         public async Task<bool> Create(TModel model)
         {
             var settings = new HttpSettings($"{Url}/{Entity}");
+            settings.AddToaster($"Create {Entity}");
 
             var body = new HttpBody<TModel>(model);
 
