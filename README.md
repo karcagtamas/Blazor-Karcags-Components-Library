@@ -22,8 +22,10 @@
 
 ### Install
 
-1. Register `HelperService`
-    - Add Service as Scoped service into `Startup.cs` or `Program.cs`
+1. Register own Toaster what have to inherit from `IToasterService`
+
+2. Register `HelperService`
+   - Add Service as Scoped service into `Startup.cs` or `Program.cs`
    ```c#
    services.AddScoped<IHelperService, HelperService>();
    ```
@@ -31,15 +33,20 @@
    ```c#
    builder.Services.AddScoped<IHelperService, HelperService>();
    ```
-   
+
 ## Common Service
 
 > Service for common HTTP calls
+>
 > - Get element by Id
 > - Get element lists
 > - Post new element
 > - Put element
 > - Remove element
+
+## Toaster
+
+> You can add own Toaster service what is have to inherited from `IToasterService`
 
 ## Modal
 
@@ -53,13 +60,15 @@
    builder.Services.AddScoped<IModalService, ModalService>();
    ```
 2. Add BlazoredModal to `App.razor` file.
+
 ```
 <BlazoredModal></BlazoredModal>
 ```
-   
+
 ## Components
 
 - Add using into `_Imports.razor`
+
 ```
 @using Karcags.Blazor.Common
 ```

@@ -1,6 +1,6 @@
 namespace Karcags.Blazor.Common.Enums
 {
-    public enum AlertType
+    public enum ToasterType
     {
         Error,
         Success,

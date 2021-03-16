@@ -3,7 +3,8 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using EventManager.Client.Models;
-using MatBlazor;
+using Karcags.Blazor.Common.Enums;
+using Karcags.Blazor.Common.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace Karcags.Blazor.Common.Services
@@ -12,12 +13,12 @@ namespace Karcags.Blazor.Common.Services
     {
         protected const string NA = "N/A";
         protected readonly NavigationManager NavigationManager;
-        protected readonly IMatToaster Toaster;
+        protected readonly IToasterService ToasterService;
 
-        public HelperService(NavigationManager navigationManager, IMatToaster toaster)
+        public HelperService(NavigationManager navigationManager, IToasterService toasterService)
         {
             this.NavigationManager = navigationManager;
-            this.Toaster = toaster;
+            this.ToasterService = toasterService;
         }
 
         public void Navigate(string path)
@@ -27,28 +28,28 @@ namespace Karcags.Blazor.Common.Services
 
         public JsonSerializerOptions GetSerializerOptions()
         {
-            return new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            return new() {PropertyNameCaseInsensitive = true};
         }
 
         public async Task AddToaster(HttpResponseMessage response, string caption)
         {
             if (response.IsSuccessStatusCode)
             {
-                this.Toaster.Add("Event successfully accomplished", MatToastType.Success, caption);
+                ToasterService.Open(new ToasterSettings
+                    {Title = "Event successfully accomplished", Caption = caption, Type = ToasterType.Success});
             }
             else
             {
-                using (var sr = await response.Content.ReadAsStreamAsync())
-                {
-                    var e = await System.Text.Json.JsonSerializer.DeserializeAsync<ErrorResponse>(sr, this.GetSerializerOptions());
-                    this.Toaster.Add(e.Message, MatToastType.Danger, caption);
-                }
+                await using var sr = await response.Content.ReadAsStreamAsync();
+                var e = await JsonSerializer.DeserializeAsync<ErrorResponse>(sr, this.GetSerializerOptions());
+                ToasterService.Open(new ToasterSettings
+                    {Title = e?.Message ?? "-", Caption = caption, Type = ToasterType.Error});
             }
         }
 
         public decimal MinToHour(int min)
         {
-            return min / (decimal)60;
+            return min / (decimal) 60;
         }
 
         public int CurrentYear()

@@ -1,4 +1,5 @@
 using System;
+using Karcags.Blazor.Common.Models;
 
 namespace Karcags.Blazor.Common.Http
 {
@@ -33,8 +34,8 @@ namespace Karcags.Blazor.Common.Http
         public HttpSettings(string url, HttpQueryParameters queryParameters, HttpPathParameters pathParameters)
         {
             this.SetUrl(url);
-            this.QueryParameters = queryParameters == null ? new HttpQueryParameters() : queryParameters;
-            this.PathParameters = pathParameters == null ? new HttpPathParameters() : pathParameters;
+            this.QueryParameters = queryParameters ?? new HttpQueryParameters();
+            this.PathParameters = pathParameters ?? new HttpPathParameters();
             this.ToasterSettings = new ToasterSettings();
         }
 
@@ -48,9 +49,9 @@ namespace Karcags.Blazor.Common.Http
         public HttpSettings(string url, HttpQueryParameters queryParameters, HttpPathParameters pathParameters, ToasterSettings toasterSettings)
         {
             this.SetUrl(url);
-            this.QueryParameters = queryParameters == null ? new HttpQueryParameters() : queryParameters;
-            this.PathParameters = pathParameters == null ? new HttpPathParameters() : pathParameters;
-            this.ToasterSettings = toasterSettings == null ? new ToasterSettings() : toasterSettings;
+            this.QueryParameters = queryParameters ?? new HttpQueryParameters();
+            this.PathParameters = pathParameters ?? new HttpPathParameters();
+            this.ToasterSettings = toasterSettings ?? new ToasterSettings();
         }
 
         /// <summary>
@@ -63,8 +64,8 @@ namespace Karcags.Blazor.Common.Http
         public HttpSettings(string url, HttpQueryParameters queryParameters, HttpPathParameters pathParameters, string toasterCaption)
         {
             this.SetUrl(url);
-            this.QueryParameters = queryParameters == null ? new HttpQueryParameters() : queryParameters;
-            this.PathParameters = pathParameters == null ? new HttpPathParameters() : pathParameters;
+            this.QueryParameters = queryParameters ?? new HttpQueryParameters();
+            this.PathParameters = pathParameters ?? new HttpPathParameters();
             this.ToasterSettings = string.IsNullOrEmpty(toasterCaption) ? new ToasterSettings() : new ToasterSettings(toasterCaption);
         }
 
