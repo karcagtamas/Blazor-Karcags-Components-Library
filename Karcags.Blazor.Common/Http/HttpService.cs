@@ -3,9 +3,10 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
 using Karcags.Blazor.Common.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace Karcags.Blazor.Common.Http
@@ -16,6 +17,8 @@ namespace Karcags.Blazor.Common.Http
         private readonly IHelperService _helperService;
         private readonly IJSRuntime _jsRuntime;
         private readonly HttpConfiguration _configuration;
+        private readonly ILocalStorageService _localStorageService;
+        private readonly NavigationManager _navigationManager;
 
         /// <summary>
         /// HTTP Service Injector
@@ -24,13 +27,17 @@ namespace Karcags.Blazor.Common.Http
         /// <param name="helperService">Helper Service</param>
         /// <param name="jsRuntime">Js Runtime</param>
         /// <param name="configuration">HTTP Configuration</param>
+        /// <param name="localStorageService">Local Storage Service</param>
+        /// <param name="navigationManager">Navigation Manager</param>
         public HttpService(HttpClient httpClient, IHelperService helperService, IJSRuntime jsRuntime,
-            HttpConfiguration configuration)
+            HttpConfiguration configuration, ILocalStorageService localStorageService, NavigationManager navigationManager)
         {
             _httpClient = httpClient;
             _helperService = helperService;
             _jsRuntime = jsRuntime;
             _configuration = configuration;
+            _localStorageService = localStorageService;
+            _navigationManager = navigationManager;
         }
 
         /// <summary>
@@ -151,7 +158,7 @@ namespace Karcags.Blazor.Common.Http
 
             if (_configuration.IsTokenBearer)
             {
-                var token = _configuration.TokenGetter();
+                var token = await _localStorageService.GetItemAsync<string>(_configuration.TokenName);
                 var isApiUrl = !request.RequestUri?.IsAbsoluteUri ?? false;
 
                 if (!string.IsNullOrEmpty(token) && isApiUrl)
@@ -212,7 +219,7 @@ namespace Karcags.Blazor.Common.Http
         {
             if (response.StatusCode != HttpStatusCode.Unauthorized) return false;
 
-            _configuration.UnauthorizedAction();
+            _navigationManager.NavigateTo(_configuration.UnauthorizedPath);
             return true;
         }
 

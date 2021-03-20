@@ -1,6 +1,8 @@
 using System;
 using System.Net.Http;
+using Blazored.LocalStorage;
 using Karcags.Blazor.Common.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.JSInterop;
@@ -16,7 +18,8 @@ namespace Karcags.Blazor.Common.Http
             configuration(conf);
             serviceCollection.TryAddScoped<IHttpService>((Func<IServiceProvider, IHttpService>) (builder =>
                 (IHttpService) new HttpService(builder.GetService<HttpClient>(), builder.GetService<IHelperService>(),
-                    builder.GetService<IJSRuntime>(), conf)));
+                    builder.GetService<IJSRuntime>(), conf, builder.GetService<ILocalStorageService>(),
+                    builder.GetService<NavigationManager>())));
             return serviceCollection;
         }
     }
