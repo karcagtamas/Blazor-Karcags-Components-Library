@@ -11,9 +11,10 @@ namespace Karcags.Blazor.Common.Http
         Task<bool> Update<T>(HttpSettings settings, HttpBody<T> body);
         Task<bool> Create<T>(HttpSettings settings, HttpBody<T> body);
         Task<string> CreateString<T>(HttpSettings settings, HttpBody<T> body);
-        Task<T> UpdateWithResult<T, V>(HttpSettings settings, HttpBody<V> body);
+        Task<T> UpdateWithResult<T, TBody>(HttpSettings settings, HttpBody<TBody> body);
         Task<int> CreateInt<T>(HttpSettings settings, HttpBody<T> body);
         Task<bool> Download(HttpSettings settings);
         Task<bool> Download<T>(HttpSettings settings, T model);
+        Task<T> CreateWithResult<T, TBody>(HttpSettings settings, HttpBody<TBody> body);
     }
 }

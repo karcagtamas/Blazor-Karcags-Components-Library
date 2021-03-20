@@ -1,9 +1,12 @@
 using System;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Karcags.Blazor.Common.Services;
 using Microsoft.JSInterop;
-using System.Text.Json;
 
 namespace Karcags.Blazor.Common.Http
 {
@@ -12,17 +15,22 @@ namespace Karcags.Blazor.Common.Http
         private readonly HttpClient _httpClient;
         private readonly IHelperService _helperService;
         private readonly IJSRuntime _jsRuntime;
+        private readonly HttpConfiguration _configuration;
 
         /// <summary>
         /// HTTP Service Injector
         /// </summary>
         /// <param name="httpClient">HTTP Client</param>
         /// <param name="helperService">Helper Service</param>
-        public HttpService(HttpClient httpClient, IHelperService helperService, IJSRuntime jsRuntime)
+        /// <param name="jsRuntime">Js Runtime</param>
+        /// <param name="configuration">HTTP Configuration</param>
+        public HttpService(HttpClient httpClient, IHelperService helperService, IJSRuntime jsRuntime,
+            HttpConfiguration configuration)
         {
-            this._httpClient = httpClient;
-            this._helperService = helperService;
-            this._jsRuntime = jsRuntime;
+            _httpClient = httpClient;
+            _helperService = helperService;
+            _jsRuntime = jsRuntime;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -34,30 +42,7 @@ namespace Karcags.Blazor.Common.Http
         /// <returns>The request was success or not</returns>
         public async Task<bool> Create<T>(HttpSettings settings, HttpBody<T> body)
         {
-            this.CheckSettings(settings);
-
-            string url = this.CreateUrl(settings);
-
-            HttpResponseMessage response;
-
-            try
-            {
-
-                response = await this._httpClient.PostAsync(url, body.GetStringContent());
-            }
-            catch (Exception e)
-            {
-                this.ConsoleCallError(e, url);
-                return false;
-            }
-
-            // Optional toast
-            if (settings.ToasterSettings.IsNeeded)
-            {
-                await this._helperService.AddToaster(response, settings.ToasterSettings.Caption);
-            }
-
-            return response.IsSuccessStatusCode;
+            return (await SendRequest<T>(settings, HttpMethod.Post, null)).IsSuccess;
         }
 
         /// <summary>
@@ -69,44 +54,7 @@ namespace Karcags.Blazor.Common.Http
         /// <returns>Response string value</returns>
         public async Task<string> CreateString<T>(HttpSettings settings, HttpBody<T> body)
         {
-            this.CheckSettings(settings);
-
-            string url = this.CreateUrl(settings);
-
-            HttpResponseMessage response;
-
-            try
-            {
-                response = await this._httpClient.PostAsync(url, body.GetStringContent());
-            }
-            catch (Exception e)
-            {
-                this.ConsoleCallError(e, url);
-                return default;
-            }
-
-
-            // Optional toast
-            if (settings.ToasterSettings.IsNeeded)
-            {
-                await this._helperService.AddToaster(response, settings.ToasterSettings.Caption);
-            }
-
-            // De-serialize JSON
-            if (response.IsSuccessStatusCode)
-            {
-                try
-                {
-                    return await response.Content.ReadAsStringAsync();
-                }
-                catch (Exception e)
-                {
-                    this.ConsoleSerializationError(e);
-                    return default;
-                }
-            }
-
-            return default;
+            return await CreateWithResult<string, T>(settings, body);
         }
 
         /// <summary>
@@ -116,29 +64,7 @@ namespace Karcags.Blazor.Common.Http
         /// <returns>The request was success or not</returns>
         public async Task<bool> Delete(HttpSettings settings)
         {
-            this.CheckSettings(settings);
-
-            string url = this.CreateUrl(settings);
-
-            HttpResponseMessage response;
-
-            try
-            {
-                response = await this._httpClient.DeleteAsync(url);
-            }
-            catch (Exception e)
-            {
-                this.ConsoleCallError(e, url);
-                return false;
-            }
-
-            // Optional toast
-            if (settings.ToasterSettings.IsNeeded)
-            {
-                await this._helperService.AddToaster(response, settings.ToasterSettings.Caption);
-            }
-
-            return response.IsSuccessStatusCode;
+            return (await SendRequest<object>(settings, HttpMethod.Delete, null)).IsSuccess;
         }
 
         /// <summary>
@@ -149,42 +75,7 @@ namespace Karcags.Blazor.Common.Http
         /// <returns>Response as T type</returns>
         public async Task<T> Get<T>(HttpSettings settings)
         {
-            this.CheckSettings(settings);
-
-            string url = this.CreateUrl(settings);
-
-            HttpResponseMessage response;
-
-            try
-            {
-                response = await this._httpClient.GetAsync(url);
-            }
-            catch (Exception e)
-            {
-                this.ConsoleCallError(e, url);
-                return default;
-            }
-
-            // De-serialize JSON
-            if (response.IsSuccessStatusCode)
-            {
-                try
-                {
-                    using (var sr = await response.Content.ReadAsStreamAsync())
-                    {
-                        return await JsonSerializer.DeserializeAsync<T>(sr, this._helperService.GetSerializerOptions());
-                    }
-                }
-                catch (Exception e)
-                {
-                    this.ConsoleSerializationError(e);
-                    return default;
-                }
-            }
-            else
-            {
-                return default;
-            }
+            return (await SendRequest<T>(settings, HttpMethod.Get, null)).Content;
         }
 
         /// <summary>
@@ -194,40 +85,7 @@ namespace Karcags.Blazor.Common.Http
         /// <returns>Number response</returns>
         public async Task<int?> GetInt(HttpSettings settings)
         {
-            this.CheckSettings(settings);
-
-            string url = this.CreateUrl(settings);
-
-            HttpResponseMessage response;
-
-            try
-            {
-                response = await this._httpClient.GetAsync(url);
-            }
-            catch (Exception e)
-            {
-                this.ConsoleCallError(e, url);
-                return default;
-            }
-
-            if (response.IsSuccessStatusCode)
-            {
-                try
-                {
-                    int count = -1;
-                    int.TryParse(await response.Content.ReadAsStringAsync(), out count);
-                    return count == -1 ? null : (int?)count;
-                }
-                catch (Exception e)
-                {
-                    this.ConsoleSerializationError(e);
-                    return default;
-                }
-            }
-            else
-            {
-                return null;
-            }
+            return await Get<int?>(settings);
         }
 
         /// <summary>
@@ -237,40 +95,7 @@ namespace Karcags.Blazor.Common.Http
         /// <returns>String response</returns>
         public async Task<string> GetString(HttpSettings settings)
         {
-            this.CheckSettings(settings);
-
-            string url = this.CreateUrl(settings);
-
-            HttpResponseMessage response;
-
-            try
-            {
-                response = await this._httpClient.GetAsync(url);
-            }
-            catch (Exception e)
-            {
-                this.ConsoleCallError(e, url);
-                return default;
-            }
-
-
-            // De-serialize JSON
-            if (response.IsSuccessStatusCode)
-            {
-                try
-                {
-                    return await response.Content.ReadAsStringAsync();
-                }
-                catch (Exception e)
-                {
-                    this.ConsoleSerializationError(e);
-                    return default;
-                }
-            }
-            else
-            {
-                return default;
-            }
+            return await Get<string>(settings);
         }
 
         /// <summary>
@@ -282,29 +107,113 @@ namespace Karcags.Blazor.Common.Http
         /// <returns>The request was success or not</returns>
         public async Task<bool> Update<T>(HttpSettings settings, HttpBody<T> body)
         {
-            this.CheckSettings(settings);
+            return (await SendRequest<T>(settings, HttpMethod.Put, body.GetStringContent())).IsSuccess;
+        }
 
-            string url = this.CreateUrl(settings);
+        public async Task<T> UpdateWithResult<T, TBody>(HttpSettings settings, HttpBody<TBody> body)
+        {
+            return (await SendRequest<T>(settings, HttpMethod.Put, body.GetStringContent())).Content;
+        }
 
-            HttpResponseMessage response;
+        public async Task<int> CreateInt<T>(HttpSettings settings, HttpBody<T> body)
+        {
+            return await CreateWithResult<int, T>(settings, body);
+        }
+
+        public async Task<bool> Download(HttpSettings settings)
+        {
+            return Download(await Get<ExportResult>(settings));
+        }
+
+        public async Task<bool> Download<T>(HttpSettings settings, T model)
+        {
+            var body = new HttpBody<T>(model);
+
+            return Download(await UpdateWithResult<ExportResult, T>(settings, body));
+        }
+
+        public async Task<T> CreateWithResult<T, TBody>(HttpSettings settings, HttpBody<TBody> body)
+        {
+            return (await SendRequest<T>(settings, HttpMethod.Post, body.GetStringContent())).Content;
+        }
+
+        private async Task<HttpResponse<T>> SendRequest<T>(HttpSettings settings, HttpMethod method,
+            HttpContent content)
+        {
+            CheckSettings(settings);
+
+            var url = CreateUrl(settings);
+            var request = new HttpRequestMessage(method, url);
+            if (content != null)
+            {
+                request.Content = content;
+            }
+
+            if (_configuration.IsTokenBearer)
+            {
+                var token = _configuration.TokenGetter();
+                var isApiUrl = !request.RequestUri?.IsAbsoluteUri ?? false;
+
+                if (!string.IsNullOrEmpty(token) && isApiUrl)
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+            }
 
             try
             {
-                response = await this._httpClient.PutAsync(url, body.GetStringContent());
+                using var response = await _httpClient.SendAsync(request);
+
+                if (CheckActionWasUnauthorized(response))
+                {
+                    return new HttpResponse<T> {IsSuccess = false};
+                }
+
+                if (settings.ToasterSettings.IsNeeded)
+                {
+                    await _helperService.AddToaster(response, settings.ToasterSettings.Caption);
+                }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new HttpResponse<T> {IsSuccess = false};
+                }
+
+                try
+                {
+                    return new HttpResponse<T>
+                        {IsSuccess = false, Content = await response.Content.ReadFromJsonAsync<T>()};
+                }
+                catch (Exception e)
+                {
+                    ConsoleSerializationError(e);
+                    return new HttpResponse<T> {IsSuccess = false};
+                }
             }
             catch (Exception e)
             {
-                this.ConsoleCallError(e, url);
-                return false;
+                ConsoleCallError(e, url);
+                return new HttpResponse<T> {IsSuccess = false};
             }
+        }
 
-            // Optional toast
-            if (settings.ToasterSettings.IsNeeded)
+        private bool Download(ExportResult result)
+        {
+            if (_jsRuntime is IJSUnmarshalledRuntime unmarshalledRuntime)
             {
-                await this._helperService.AddToaster(response, settings.ToasterSettings.Caption);
+                unmarshalledRuntime.InvokeUnmarshalled<string, string, byte[], bool>("manageDownload", result.FileName,
+                    result.ContentType, result.Content);
             }
 
-            return response.IsSuccessStatusCode;
+            return true;
+        }
+
+        private bool CheckActionWasUnauthorized(HttpResponseMessage response)
+        {
+            if (response.StatusCode != HttpStatusCode.Unauthorized) return false;
+
+            _configuration.UnauthorizedAction();
+            return true;
         }
 
         /// <summary>
@@ -324,7 +233,7 @@ namespace Karcags.Blazor.Common.Http
 
             if (settings.QueryParameters.Count() > 0)
             {
-                url += $"?{settings.QueryParameters.ToString()}";
+                url += $"?{settings.QueryParameters}";
             }
 
             return url;
@@ -348,79 +257,6 @@ namespace Karcags.Blazor.Common.Http
         {
             Console.WriteLine($"HTTP Call Error from {url}: ");
             Console.WriteLine(e);
-        }
-
-        public async Task<T> UpdateWithResult<T, V>(HttpSettings settings, HttpBody<V> body)
-        {
-            this.CheckSettings(settings);
-
-            string url = this.CreateUrl(settings);
-
-            HttpResponseMessage response;
-
-            try
-            {
-                response = await this._httpClient.PutAsync(url, body.GetStringContent());
-            }
-            catch (Exception e)
-            {
-                this.ConsoleCallError(e, url);
-                return default;
-            }
-
-            // Optional toast
-            if (settings.ToasterSettings.IsNeeded)
-            {
-                await this._helperService.AddToaster(response, settings.ToasterSettings.Caption);
-            }
-
-            // De-serialize JSON
-            if (response.IsSuccessStatusCode)
-            {
-                try
-                {
-                    using (var sr = await response.Content.ReadAsStreamAsync())
-                    {
-                        return await JsonSerializer.DeserializeAsync<T>(sr, this._helperService.GetSerializerOptions());
-                    }
-                }
-                catch (Exception e)
-                {
-                    this.ConsoleSerializationError(e);
-                    return default;
-                }
-            }
-            else
-            {
-                return default;
-            }
-        }
-
-        public async Task<int> CreateInt<T>(HttpSettings settings, HttpBody<T> body)
-        {
-            return int.Parse(await this.CreateString(settings, body));
-        }
-
-        public async Task<bool> Download(HttpSettings settings)
-        {
-            return this.Download(await this.Get<ExportResult>(settings));
-        }
-
-        public async Task<bool> Download<T>(HttpSettings settings, T model)
-        {
-            var body = new HttpBody<T>(model);
-
-            return this.Download(await this.UpdateWithResult<ExportResult, T>(settings, body));
-        }
-
-        private bool Download(ExportResult result)
-        {
-            if (this._jsRuntime is IJSUnmarshalledRuntime unmarshalledRuntime)
-            {
-                unmarshalledRuntime.InvokeUnmarshalled<string, string, byte[], bool>("manageDownload", result.FileName, result.ContentType, result.Content);
-            }
-
-            return true;
         }
     }
 }
