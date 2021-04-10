@@ -159,7 +159,7 @@ namespace Karcags.Blazor.Common.Http
             if (_configuration.IsTokenBearer)
             {
                 var token = await _localStorageService.GetItemAsync<string>(_configuration.TokenName);
-                var isApiUrl = !request.RequestUri?.IsAbsoluteUri ?? false;
+                var isApiUrl = request.RequestUri?.IsAbsoluteUri ?? false;
 
                 if (!string.IsNullOrEmpty(token) && isApiUrl)
                 {
