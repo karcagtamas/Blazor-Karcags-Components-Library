@@ -49,7 +49,7 @@ namespace Karcags.Blazor.Common.Http
         /// <returns>The request was success or not</returns>
         public async Task<bool> Create<T>(HttpSettings settings, HttpBody<T> body)
         {
-            return (await SendRequest<T>(settings, HttpMethod.Post, null)).IsSuccess;
+            return (await SendRequest<object>(settings, HttpMethod.Post, body.GetStringContent())).IsSuccess;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Karcags.Blazor.Common.Http
         /// <returns>Response as T type</returns>
         public async Task<T> Get<T>(HttpSettings settings)
         {
-            return (await SendRequest<T>(settings, HttpMethod.Get, null)).Content;
+            return (await SendRequest<T>(settings, HttpMethod.Get, null, true)).Content;
         }
 
         /// <summary>
@@ -114,12 +114,12 @@ namespace Karcags.Blazor.Common.Http
         /// <returns>The request was success or not</returns>
         public async Task<bool> Update<T>(HttpSettings settings, HttpBody<T> body)
         {
-            return (await SendRequest<T>(settings, HttpMethod.Put, body.GetStringContent())).IsSuccess;
+            return (await SendRequest<object>(settings, HttpMethod.Put, body.GetStringContent())).IsSuccess;
         }
 
         public async Task<T> UpdateWithResult<T, TBody>(HttpSettings settings, HttpBody<TBody> body)
         {
-            return (await SendRequest<T>(settings, HttpMethod.Put, body.GetStringContent())).Content;
+            return (await SendRequest<T>(settings, HttpMethod.Put, body.GetStringContent(), true)).Content;
         }
 
         public async Task<int> CreateInt<T>(HttpSettings settings, HttpBody<T> body)
@@ -141,11 +141,16 @@ namespace Karcags.Blazor.Common.Http
 
         public async Task<T> CreateWithResult<T, TBody>(HttpSettings settings, HttpBody<TBody> body)
         {
-            return (await SendRequest<T>(settings, HttpMethod.Post, body.GetStringContent())).Content;
+            return (await SendRequest<T>(settings, HttpMethod.Post, body.GetStringContent(), true)).Content;
+        }
+
+        private async Task<HttpResponse<T>> SendRequest<T>(HttpSettings settings, HttpMethod method, HttpContent content)
+        {
+            return await SendRequest<T>(settings, method, content, false);
         }
 
         private async Task<HttpResponse<T>> SendRequest<T>(HttpSettings settings, HttpMethod method,
-            HttpContent content)
+            HttpContent content, bool parseResult)
         {
             CheckSettings(settings);
 
@@ -188,8 +193,14 @@ namespace Karcags.Blazor.Common.Http
 
                 try
                 {
-                    return new HttpResponse<T>
-                        {IsSuccess = false, Content = await response.Content.ReadFromJsonAsync<T>()};
+                    if (parseResult)
+                    {
+                        return new HttpResponse<T>
+                            {IsSuccess = true, Content = await response.Content.ReadFromJsonAsync<T>()};
+                    }
+
+                    return new HttpResponse<T> {IsSuccess = true};
+
                 }
                 catch (Exception e)
                 {
